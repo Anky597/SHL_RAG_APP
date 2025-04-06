@@ -4,7 +4,11 @@ A comprehensive product catalogue application for SHL's assessment solutions, en
 
 ## APP Link : - https://shl-product-catalogue.netlify.app/
 
+# Architecture Diagram
 ![image](https://github.com/user-attachments/assets/ace1ede6-e628-4d9b-aeeb-abc7eeb0c3b7)
+
+# Sequence Diagram
+![image](https://github.com/user-attachments/assets/71ff37ff-0a27-4c21-b099-53a10b16b346)
 
 
 ## Overview
