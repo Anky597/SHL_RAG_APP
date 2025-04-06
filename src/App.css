@@ -1,0 +1,368 @@
+/* ==========================================================================
+   Global Styles & CSS Variables (Dark Theme based on Screenshot)
+   ========================================================================== */
+
+:root {
+  /* Core Color Palette (Matching screenshot/previous variables) */
+  --shl-black: #0F172A; /* Slightly adjusted dark slate for background */
+  --shl-navy: #1E293B; /* Main content background (cards, etc.) */
+  --shl-slate: #334155; /* Borders and darker elements */
+  --shl-light-slate: #475569; /* Lighter borders, secondary elements */
+  --shl-silver: #FFFFFF; /* Primary text (Changed to pure white) */
+  --shl-light-silver: #E2E8F0; /* Secondary text (Lightened to be more visible) */
+  --shl-blue: #60A5FA; /* Accent Blue (Links, Highlights) */
+  --shl-dark-blue-bg: #2563EB; /* Active Button/Tab Background */
+  --shl-amber: #FBBF24; /* Featured/Gold */
+
+  /* Derived Variables for easier use */
+  --background-color: var(--shl-black);
+  --content-background: var(--shl-navy);
+  --border-color: var(--shl-slate);
+  --text-color-primary: var(--shl-silver);
+  --text-color-secondary: var(--shl-light-silver);
+  --accent-color: var(--shl-blue);
+  --accent-bg-active: var(--shl-dark-blue-bg);
+  --tag-background: var(--shl-light-slate);
+  
+  /* Font setup */
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Base theme setup */
+color-scheme: dark;
+color: var(--text-color-primary);
+background-color: var(--background-color);
+
+font-synthesis: none;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-text-size-adjust: 100%;
+}
+
+/* Basic Reset & Body */
+body {
+margin: 0;
+min-width: 320px;
+min-height: 100vh;
+}
+
+#root {
+width: 100%;
+}
+
+/* General Typography */
+h1, h2, h3, h4, h5, h6 {
+color: var(--text-color-primary);
+font-weight: 600;
+margin-top: 0;
+margin-bottom: 0.75rem;
+}
+h1 { font-size: 2rem; line-height: 2.5rem;} /* ~text-3xl */
+h2 { font-size: 1.5rem; line-height: 2rem; } /* ~text-2xl */
+h3 { font-size: 1.25rem; line-height: 1.75rem; } /* ~text-xl */
+h4 { font-size: 1.125rem; line-height: 1.75rem; } /* ~text-lg */
+
+p {
+color: var(--text-color-secondary);
+margin-top: 0;
+margin-bottom: 1rem;
+}
+
+a {
+color: var(--accent-color);
+text-decoration: none;
+transition: color 0.2s ease;
+}
+a:hover {
+color: color-mix(in srgb, var(--accent-color) 80%, white 20%); /* Lighter blue */
+}
+
+ul, ol {
+margin: 0.5rem 0 1rem 0;
+padding-left: 1.5rem;
+color: var(--text-color-secondary);
+}
+li { margin-bottom: 0.3rem; }
+
+/* ==========================================================================
+   Layout & Containers
+   ========================================================================== */
+.container {
+width: 100%;
+max-width: 1280px; /* Or your desired max width */
+margin-left: auto;
+margin-right: auto;
+padding-left: 1rem;
+padding-right: 1rem;
+}
+@media (min-width: 640px) { .container { padding-left: 1.5rem; padding-right: 1.5rem; } }
+@media (min-width: 1024px) { .container { padding-left: 2rem; padding-right: 2rem; } }
+
+
+/* ==========================================================================
+   Component Styles (Matching Previous Examples)
+   ========================================================================== */
+
+/* Content Sections / Cards (used for info boxes, product cards, etc.) */
+.content-section {
+background-color: var(--content-background);
+border: 1px solid var(--border-color);
+border-radius: 0.5rem; /* 8px */
+padding: 1.5rem; /* Default padding */
+margin-bottom: 1.5rem; /* Default spacing */
+box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.content-section-header {
+padding-bottom: 1rem;
+margin-bottom: 1rem;
+border-bottom: 1px solid var(--border-color);
+}
+
+/* Specific Product Card */
+.product-card {
+background-color: var(--content-background);
+border: 1px solid var(--border-color);
+border-radius: 0.5rem;
+overflow: hidden; /* Important for footer */
+display: flex;
+flex-direction: column; /* Ensure footer stays at bottom */
+transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+border-color: var(--shl-light-slate);
+box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+.product-card-header { padding: 1.25rem; padding-bottom: 0.5rem; }
+.product-card-content { padding: 0 1.25rem 1.25rem; flex-grow: 1; } /* Allow content to grow */
+.product-card-footer {
+background-color: rgba(30, 41, 59, 0.5); /* Slightly different footer bg (slate-800/50) */
+border-top: 1px solid var(--border-color);
+padding: 1rem 1.25rem;
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+align-items: center;
+gap: 0.75rem;
+margin-top: auto; /* Push footer to bottom */
+}
+
+/* Input Fields */
+.input-wrapper { position: relative; }
+.input-icon {
+position: absolute;
+left: 0.75rem;
+top: 50%;
+transform: translateY(-50%);
+color: var(--text-color-secondary);
+pointer-events: none;
+line-height: 0; /* Prevent icon affecting line height */
+}
+.input-field {
+display: block;
+width: 100%;
+padding: 0.5rem 0.75rem;
+font-size: 0.875rem;
+line-height: 1.25rem;
+color: var(--text-color-primary);
+background-color: var(--shl-slate); /* Use border color for bg */
+border: 1px solid var(--border-color);
+border-radius: 0.375rem;
+transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-field::placeholder { color: var(--text-color-secondary); opacity: 0.8;}
+.input-field.has-icon { padding-left: 2.25rem; } /* Adjust padding if icon present */
+.input-field.has-clear { padding-right: 2.25rem; } /* Adjust padding if clear button present */
+.input-field:focus {
+outline: none;
+border-color: var(--accent-color);
+box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 30%, transparent 70%);
+}
+.input-clear-btn {
+position: absolute;
+right: 0.5rem;
+top: 50%;
+transform: translateY(-50%);
+/* Use btn-ghost style below */
+}
+
+/* Buttons */
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 0.5rem 1rem;
+border-radius: 0.375rem;
+font-size: 0.875rem;
+font-weight: 500;
+cursor: pointer;
+transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+border: 1px solid transparent;
+white-space: nowrap;
+user-select: none; /* Prevent text selection */
+}
+.btn:focus-visible { /* Modern focus */
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary { /* Example Primary Button */
+background-color: var(--accent-bg-active);
+color: #ffffff;
+border-color: var(--accent-bg-active);
+}
+.btn-primary:hover:not(:disabled) {
+background-color: color-mix(in srgb, var(--accent-bg-active) 90%, white 10%);
+border-color: color-mix(in srgb, var(--accent-bg-active) 90%, white 10%);
+}
+
+.btn-outline {
+border-color: var(--border-color);
+color: var(--text-color-secondary);
+background-color: transparent;
+}
+.btn-outline:hover:not(:disabled) {
+background-color: var(--shl-slate); /* Use border color for hover bg */
+border-color: var(--shl-light-slate);
+color: var(--text-color-primary);
+}
+
+.btn-ghost {
+color: var(--text-color-secondary);
+background-color: transparent;
+}
+.btn-ghost:hover:not(:disabled) {
+background-color: var(--shl-slate);
+color: var(--text-color-primary);
+}
+
+.btn-link {
+color: var(--accent-color);
+background-color: transparent;
+text-decoration: none;
+padding: 0;
+height: auto;
+border: none;
+}
+.btn-link:hover:not(:disabled) {
+color: color-mix(in srgb, var(--accent-color) 80%, white 20%);
+}
+
+.btn-icon {
+   padding: 0.5rem;
+   width: 2.25rem; /* Adjust size */
+   height: 2.25rem;
+}
+
+/* Tags */
+.tag {
+display: inline-block;
+padding: 0.2rem 0.6rem;
+font-size: 0.75rem;
+font-weight: 500;
+background-color: var(--tag-background);
+color: var(--text-color-primary);
+border-radius: 9999px;
+white-space: nowrap;
+line-height: 1.2;
+}
+.tag-featured {
+background-color: color-mix(in srgb, var(--shl-amber) 20%, transparent 80%);
+color: var(--shl-amber);
+border: 1px solid color-mix(in srgb, var(--shl-amber) 40%, transparent 60%);
+}
+
+/* Accordion (Basic styling - relies on component structure/attrs) */
+.accordion-item {
+border-top: 1px solid var(--border-color);
+}
+.accordion-item:first-child { border-top: none; }
+.accordion-trigger { /* Style the trigger button/element */
+display: flex;
+width: 100%;
+justify-content: space-between;
+align-items: center;
+padding: 0.75rem 0;
+font-size: 0.875rem;
+font-weight: 500;
+color: var(--accent-color);
+background: none;
+border: none;
+text-align: left;
+cursor: pointer;
+}
+.accordion-trigger:hover {
+color: color-mix(in srgb, var(--accent-color) 80%, white 20%);
+}
+.accordion-trigger svg { /* Target chevron icon */
+transition: transform 0.2s ease-out;
+flex-shrink: 0; /* Prevent icon shrinking */
+margin-left: 0.5rem;
+}
+.accordion-trigger[data-state="open"] svg {
+transform: rotate(90deg);
+}
+.accordion-content { /* Style the content area */
+     padding: 0.5rem 0 1rem;
+     font-size: 0.875rem;
+     color: var(--text-color-secondary);
+     overflow: hidden; /* Needed for animation if added */
+}
+.accordion-content[data-state="closed"] { display: none; } /* Basic hide/show */
+.accordion-content ul { margin-top: 0.5rem; }
+
+/* Breadcrumbs */
+.breadcrumbs {
+display: flex;
+flex-wrap: wrap; /* Allow wrapping */
+align-items: center;
+font-size: 0.875rem;
+color: var(--text-color-secondary);
+padding: 0.75rem 0; /* Added padding */
+}
+.breadcrumbs a:hover { color: var(--accent-color); }
+.breadcrumb-separator {
+margin: 0 0.375rem;
+color: var(--shl-slate); /* Use border color */
+user-select: none;
+}
+.breadcrumb-current {
+color: var(--text-color-primary);
+font-weight: 500;
+}
+
+/* Empty / Loading States */
+.state-container {
+text-align: center;
+padding: 3rem 1.5rem;
+border-radius: 0.5rem;
+background-color: var(--content-background);
+border: 1px solid var(--border-color);
+}
+.state-container.dashed-border {
+     border-style: dashed;
+     border-color: var(--shl-slate);
+}
+.state-icon-wrapper {
+display: inline-flex;
+background-color: var(--shl-slate);
+border-radius: 9999px;
+width: 4rem;
+height: 4rem;
+align-items: center;
+justify-content: center;
+margin: 0 auto 1.25rem;
+color: var(--text-color-secondary);
+}
+/* Loading spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { animation: spin 1s linear infinite; }
+
+/* Remove original Vite styles if not needed */
+/* @keyframes logo-spin { ... } */
+/* .logo { ... } */
+/* .read-the-docs { ... } */
