@@ -1,6 +1,7 @@
 # SHL Product Catalogue with RAG-Powered Recommendations
 
 A comprehensive product catalogue application for SHL's assessment solutions, enhanced with AI-powered recommendations using Retrieval Augmented Generation (RAG).
+Cold Start could take upto 50 seconds due to resource limitation  
 
 ## APP Link : - https://shl-product-catalogue.netlify.app/
 
