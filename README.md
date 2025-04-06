@@ -1,74 +1,152 @@
-# Welcome to your Lovable project
+# SHL Product Catalogue with RAG-Powered Recommendations
 
-## Project info
+A comprehensive product catalogue application for SHL's assessment solutions, enhanced with AI-powered recommendations using Retrieval Augmented Generation (RAG).
 
-**URL**: https://lovable.dev/projects/2b8ef915-faac-4f9f-bcb6-9fde93fdcbeb
+![SHL Product Catalogue](https://example.com/screenshot.png)
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+This application serves as an interactive catalogue for SHL's assessment products, allowing users to explore different assessment tools through categories, search functionality, and AI-powered recommendations. The system combines a modern React frontend with a sophisticated RAG backend to provide intelligent product suggestions based on natural language queries.
 
-**Use Lovable**
+## Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2b8ef915-faac-4f9f-bcb6-9fde93fdcbeb) and start prompting.
+- **Product Browsing & Categorization**: Browse products organized by categories
+- **Search Functionality**: Find products using keywords and filters
+- **AI-Powered Recommendations**: Get personalized product suggestions through natural language queries
+- **Detailed Product Information**: View comprehensive details about each assessment tool
+- **Responsive Design**: Optimized for all device sizes
 
-Changes made via Lovable will be committed automatically to this repo.
+## Technical Architecture
 
-**Use your preferred IDE**
+### Frontend
+- **Framework**: React with TypeScript
+- **Build Tool**: Vite
+- **UI Components**: shadcn/ui component library
+- **Styling**: Tailwind CSS
+- **Routing**: React Router
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Backend
+- **API Layer**: Flask with CORS support
+- **Deployment**: Render.com (serverless)
+- **AI Integration**: Hugging Face Spaces with Gradio interface
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### RAG System
+- **Vector Database**: Chroma DB (ephemeral storage for serverless deployment)
+- **Embedding Model**: Sentence Transformers (`all-MiniLM-L6-v2`)
+- **LLM**: Google's Gemini 2.0 Flash
+- **Framework**: LangChain for RAG pipeline orchestration
 
-Follow these steps:
+## System Workflow
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. **User Query Submission**:
+   - User enters a natural language query in the frontend
+   - Query is converted to JSON format and sent to the backend API endpoint
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+2. **API Processing**:
+   - Backend API (hosted on Render) receives the query
+   - Forwards the query to Hugging Face Space for RAG processing
+   - Note: Free tier on Render may take up to 50 seconds for cold starts
 
-# Step 3: Install the necessary dependencies.
-npm i
+3. **RAG Processing on Hugging Face**:
+   - Creates a temporary vector database using the embedding model
+   - Indexes product data from JSON files
+   - Processes the query using the RAG pipeline:
+     - Converts query to embeddings
+     - Retrieves relevant documents from vector store
+     - Generates a response using Gemini LLM with retrieved context
+   - Returns the response to the Render API endpoint
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+4. **Response Handling**:
+   - Backend converts the RAG response to JSON format
+   - Sends the formatted response back to the frontend
+   - Frontend displays the AI-generated recommendations to the user
+
+## Installation and Setup
+
+### Prerequisites
+- Node.js (v16+)
+- Python 3.9+
+- Google API key for Gemini access
+
+### Frontend Setup
+```bash
+# Clone the repository
+git clone <repository-url>
+cd assess-match-horizon-main4
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Backend Setup
+```bash
+# Set up Python environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+# Install dependencies
+pip install -r requirements.txt
 
-**Use GitHub Codespaces**
+# Set environment variables
+export GOOGLE_API_KEY=your_google_api_key
+export JSON_DATA_PATH=/path/to/data.json
+export VECTOR_DB_PATH=/tmp/chromadb
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Run Flask server
+python backend_file.py
+```
 
-## What technologies are used for this project?
+### Hugging Face Space Setup
+The RAG component is deployed as a Hugging Face Space. To replicate:
 
-This project is built with:
+1. Create a new Gradio Space on Hugging Face
+2. Upload the contents of the `rag-app-hf` directory
+3. Configure the environment variables in the Space settings
+4. Deploy the Space
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Deployment
 
-## How can I deploy this project?
+### Frontend
+The frontend is deployed on Netlify/Vercel with the following configuration:
+- Build command: `npm run build`
+- Publish directory: `dist`
 
-Simply open [Lovable](https://lovable.dev/projects/2b8ef915-faac-4f9f-bcb6-9fde93fdcbeb) and click on Share -> Publish.
+### Backend
+The backend is deployed on Render.com with:
+- Runtime: Python 3.9
+- Build command: `pip install -r requirements.txt`
+- Start command: `gunicorn app:app`
+- Environment variables:
+  - `HF_GRADIO_API_SPACE`: Your Hugging Face Space name
+  - `GOOGLE_API_KEY`: Your Google API key
+  - `JSON_DATA_PATH`: Path to product data JSON
+  - `VECTOR_DB_PATH`: Path for temporary vector database
 
-## Can I connect a custom domain to my Lovable project?
+## Performance Considerations
 
-Yes it is!
+- **Cold Start**: The free tier on Render has cold starts that can take up to 50 seconds
+- **Ephemeral Storage**: The vector database is recreated for each request due to serverless constraints
+- **Optimization**: For production use, consider:
+  - Upgrading to paid tiers for persistent storage
+  - Pre-computing embeddings and storing them
+  - Implementing caching for common queries
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Future Enhancements
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
-# SHL_RAG_APP
+- Implement user authentication and personalized recommendations
+- Add product comparison functionality
+- Integrate usage analytics to improve recommendations
+- Implement offline mode with cached recommendations
+
+## License
+
+[MIT License](LICENSE)
+
+## Acknowledgements
+
+- SHL for providing the product data
+- Hugging Face for hosting the RAG component
+- Google for Gemini API access
