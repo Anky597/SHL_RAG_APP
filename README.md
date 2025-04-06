@@ -2,7 +2,7 @@
 
 A comprehensive product catalogue application for SHL's assessment solutions, enhanced with AI-powered recommendations using Retrieval Augmented Generation (RAG).
 
-![SHL Product Catalogue](https://example.com/screenshot.png)
+## APP Link : - https://shl-product-catalogue.netlify.app/
 
 ## Overview
 
