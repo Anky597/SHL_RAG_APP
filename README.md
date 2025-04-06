@@ -4,6 +4,9 @@ A comprehensive product catalogue application for SHL's assessment solutions, en
 
 ## APP Link : - https://shl-product-catalogue.netlify.app/
 
+![image](https://github.com/user-attachments/assets/ace1ede6-e628-4d9b-aeeb-abc7eeb0c3b7)
+
+
 ## Overview
 
 This application serves as an interactive catalogue for SHL's assessment products, allowing users to explore different assessment tools through categories, search functionality, and AI-powered recommendations. The system combines a modern React frontend with a sophisticated RAG backend to provide intelligent product suggestions based on natural language queries.
