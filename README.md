@@ -6,155 +6,187 @@ Cold Start could take upto 50 seconds due to resource limitation
 ## APP Link : - https://shl-product-catalogue.netlify.app/
 
 # Architecture Diagram
-![image](https://github.com/user-attachments/assets/ace1ede6-e628-4d9b-aeeb-abc7eeb0c3b7)
+![image](https://github.com/user-attachments/assets/2b63e07f-ccd8-4ebf-8080-b673a063c95a)
+
 
 # Sequence Diagram
 ![image](https://github.com/user-attachments/assets/71ff37ff-0a27-4c21-b099-53a10b16b346)
 
+# SHL Product Catalogue RAG System
+
+This project implements a Retrieval-Augmented Generation (RAG) system for SHL's product catalogue, allowing users to search and get recommendations for SHL assessment products through natural language queries.
 
 ## Overview
 
-This application serves as an interactive catalogue for SHL's assessment products, allowing users to explore different assessment tools through categories, search functionality, and AI-powered recommendations. The system combines a modern React frontend with a sophisticated RAG backend to provide intelligent product suggestions based on natural language queries.
+The SHL Product Catalogue uses a modern tech stack to provide an AI-powered search experience:
 
-## Features
+- **Frontend**: React with TypeScript, Tailwind CSS, and Shadcn UI components
+- **Backend**: Flask API deployed on Hugging Face
+- **Database**: Supabase for storing product data and vector embeddings
+- **AI Models**: 
+  - all-MiniLM-L6-v2 for vector embeddings
+  - Gemini for natural language processing
 
-- **Product Browsing & Categorization**: Browse products organized by categories
-- **Search Functionality**: Find products using keywords and filters
-- **AI-Powered Recommendations**: Get personalized product suggestions through natural language queries
-- **Detailed Product Information**: View comprehensive details about each assessment tool
-- **Responsive Design**: Optimized for all device sizes
+## Project Architecture
 
-## Technical Architecture
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   React     │    │  Flask API  │    │  Supabase   │
+│  Frontend   │───▶│ (Hugging   │◀───▶│  Database   │
+│             │    │   Face)     │    │             │
+└─────────────┘    └─────────────┘    └─────────────┘
+                          │
+                          ▼
+                   ┌─────────────┐
+                   │   Gemini    │
+                   │     LLM     │
+                   │             │
+                   └─────────────┘
+```
 
-### Frontend
-- **Framework**: React with TypeScript
-- **Build Tool**: Vite
-- **UI Components**: shadcn/ui component library
-- **Styling**: Tailwind CSS
-- **Routing**: React Router
+## Implementation Details
 
-### Backend
-- **API Layer**: Flask with CORS support
-- **Deployment**: Render.com (serverless)
-- **AI Integration**: Hugging Face Spaces with Gradio interface
+### 1. Data Collection
 
-### RAG System
-- **Vector Database**: Chroma DB (ephemeral storage for serverless deployment)
-- **Embedding Model**: Sentence Transformers (`all-MiniLM-L6-v2`)
-- **LLM**: Google's Gemini 2.0 Flash
-- **Framework**: LangChain for RAG pipeline orchestration
+- Web scraper collected data from SHL product pages
+- Created a JSON file with 453 products
+- Data includes product names, descriptions, categories, and other relevant metadata
 
-## System Workflow
+### 2. Database Setup
 
-1. **User Query Submission**:
-   - User enters a natural language query in the frontend
-   - Query is converted to JSON format and sent to the backend API endpoint
+- Created a Supabase instance with tables for:
+  - Raw product data
+  - Vector embeddings of product descriptions
 
-2. **API Processing**:
-   - Backend API (hosted on Render) receives the query
-   - Forwards the query to Hugging Face Space for RAG processing
-   - Note: Free tier on Render may take up to 50 seconds for cold starts
+### 3. Vector Embeddings
 
-3. **RAG Processing on Hugging Face**:
-   - Creates a temporary vector database using the embedding model
-   - Indexes product data from JSON files
-   - Processes the query using the RAG pipeline:
-     - Converts query to embeddings
-     - Retrieves relevant documents from vector store
-     - Generates a response using Gemini LLM with retrieved context
-   - Returns the response to the Render API endpoint
+- Used the all-MiniLM-L6-v2 model to convert product descriptions into vector embeddings
+- Stored these embeddings in Supabase for efficient similarity search
 
-4. **Response Handling**:
-   - Backend converts the RAG response to JSON format
-   - Sends the formatted response back to the frontend
-   - Frontend displays the AI-generated recommendations to the user
+### 4. Backend API
 
-## Installation and Setup
+- Developed a Flask API that:
+  - Receives user queries
+  - Converts queries to vector embeddings
+  - Performs similarity search in Supabase
+  - Sends relevant products and user query to Gemini LLM
+  - Returns structured JSON responses
+- Deployed using Docker on Hugging Face
+
+### 5. Frontend Integration
+
+- Built a React frontend with:
+  - Search interface
+  - Product listings
+  - Detailed product views
+  - Chat interface for natural language queries
+- Connected to the Flask API endpoint for real-time recommendations
+
+## Setup Instructions
 
 ### Prerequisites
-- Node.js (v16+)
-- Python 3.9+
-- Google API key for Gemini access
 
-### Frontend Setup
+- Node.js and npm/yarn/bun
+- Git
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <your-repository-url>
+   cd RAG_front_end-main
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   bun install
+   ```
+
+3. Create a `.env` file in the root directory with the following variables:
+   ```
+   VITE_API_ENDPOINT=https://ankys-shl-back.hf.space/recommend
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   bun dev
+   ```
+
+5. Open your browser and navigate to `http://localhost:5173`
+
+### Building for Production
+
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd assess-match-horizon-main4
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
+npm run build
+# or
+yarn build
+# or
+bun build
 ```
 
-### Backend Setup
-```bash
-# Set up Python environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+## API Documentation
 
-# Install dependencies
-pip install -r requirements.txt
+The backend API accepts POST requests to the `/recommend` endpoint with a JSON body:
 
-# Set environment variables
-export GOOGLE_API_KEY=your_google_api_key
-export JSON_DATA_PATH=/path/to/data.json
-export VECTOR_DB_PATH=/tmp/chromadb
-
-# Run Flask server
-python backend_file.py
+```json
+{
+  "query": "Your search query here"
+}
 ```
 
-### Hugging Face Space Setup
-The RAG component is deployed as a Hugging Face Space. To replicate:
+And returns a JSON response in the format:
 
-1. Create a new Gradio Space on Hugging Face
-2. Upload the contents of the `rag-app-hf` directory
-3. Configure the environment variables in the Space settings
-4. Deploy the Space
+```json
+{
+  "status": "success",
+  "message": "Found matching products",
+  "recommended_assessments": [
+    {
+      "product_id": "p123",
+      "product_name": "Product Name",
+      "url": "product-url",
+      "adaptive_support": "Yes/No",
+      "description": "Product description",
+      "duration": 30,
+      "remote_support": "Yes/No",
+      "test_type": ["Type1", "Type2"]
+    }
+  ]
+}
+```
 
-## Deployment
+## Security Notes
 
-### Frontend
-The frontend is deployed on Netlify/Vercel with the following configuration:
-- Build command: `npm run build`
-- Publish directory: `dist`
+This project uses several API keys and secrets that should be kept confidential:
 
-### Backend
-The backend is deployed on Render.com with:
-- Runtime: Python 3.9
-- Build command: `pip install -r requirements.txt`
-- Start command: `gunicorn app:app`
-- Environment variables:
-  - `HF_GRADIO_API_SPACE`: Your Hugging Face Space name
-  - `GOOGLE_API_KEY`: Your Google API key
-  - `JSON_DATA_PATH`: Path to product data JSON
-  - `VECTOR_DB_PATH`: Path for temporary vector database
+- Gemini API key (for LLM processing)
+- Supabase URL and secret key (for database access)
+- Hugging Face API token (for model access)
 
-## Performance Considerations
+These secrets are stored securely in environment variables on the deployment platforms and should never be committed to the repository.
 
-- **Cold Start**: The free tier on Render has cold starts that can take up to 50 seconds
-- **Ephemeral Storage**: The vector database is recreated for each request due to serverless constraints
-- **Optimization**: For production use, consider:
-  - Upgrading to paid tiers for persistent storage
-  - Pre-computing embeddings and storing them
-  - Implementing caching for common queries
-
-## Future Enhancements
+## Future Improvements
 
 - Implement user authentication and personalized recommendations
-- Add product comparison functionality
-- Integrate usage analytics to improve recommendations
-- Implement offline mode with cached recommendations
+- Add more filtering options for product search
+- Improve vector embedding model for better semantic search
+- Add analytics to track user queries and improve recommendations
+- Expand the product database with more detailed information
+
+## Contributors
+
+- Aniket Nikam
 
 ## License
 
-[MIT License](LICENSE)
+This project is proprietary and confidential. All rights reserved.
 
-## Acknowledgements
-
-- SHL for providing the product data
-- Hugging Face for hosting the RAG component
-- Google for Gemini API access
+  
