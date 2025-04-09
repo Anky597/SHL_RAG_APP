@@ -8,10 +8,6 @@ Cold Start could take upto 50 seconds due to resource limitation
 # Architecture Diagram
 ![image](https://github.com/user-attachments/assets/2b63e07f-ccd8-4ebf-8080-b673a063c95a)
 
-
-# Sequence Diagram
-![image](https://github.com/user-attachments/assets/71ff37ff-0a27-4c21-b099-53a10b16b346)
-
 # SHL Product Catalogue RAG System
 
 This project implements a Retrieval-Augmented Generation (RAG) system for SHL's product catalogue, allowing users to search and get recommendations for SHL assessment products through natural language queries.
